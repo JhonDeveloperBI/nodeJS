@@ -7,3 +7,9 @@ npm i express-fileupload
 
 npm i uuid
 
+
+cloudinary hosting de imagenes
+
+https://cloudinary.com/
+
+npm i cloudinary

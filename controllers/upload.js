@@ -3,6 +3,8 @@ const fs = require('fs');
 const { response } = require("express");
 const { subirArchivo } = require("../helpers");
 const { Usuario, Producto } = require("../models");
+const cloudinary = require('cloudinary').v2
+cloudinary.config( process.env.CLOUDINARY_URL );
 
 const cargarArchivo = async(req, res =response) =>{
  
@@ -76,6 +78,8 @@ const actualizarImagen = async(req, res = response ) => {
     res.json( modelo );
 
 }
+
+// para utilizar cloudinary
 /*
 const actualizarImagenCloudinary = async(req, res = response ) => {
 
