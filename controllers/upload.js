@@ -61,7 +61,7 @@ const actualizarImagen = async(req, res = response ) => {
     if ( modelo.img ) {
         // Hay que borrar la imagen del servidor dependiendo de la coleccion
         const pathImagen = path.join( __dirname, '../uploads', coleccion, modelo.img );
-        if ( fs.existsSync( pathImagen ) ) {
+        if ( fs.existsSync( pathImagen ) ) { // existe el archivo lo borramos
             fs.unlinkSync( pathImagen );
         }
     }
@@ -130,8 +130,56 @@ const actualizarImagenCloudinary = async(req, res = response ) => {
 }
 */
 
+
+const mostrarImagen = async(req, res = response ) => {
+
+    const { id, coleccion } = req.params;
+
+    let modelo;
+
+    switch ( coleccion ) {
+        case 'usuarios':
+            modelo = await Usuario.findById(id);
+            if ( !modelo ) {
+                // si no existe modelo se puede devolver una imagen por defecto
+                return res.status(400).json({
+                    msg: `No existe un usuario con el id ${ id }`
+                });
+            }
+        
+        break;
+
+        case 'productos':
+            modelo = await Producto.findById(id);
+            if ( !modelo ) {
+                return res.status(400).json({
+                    msg: `No existe un producto con el id ${ id }`
+                });
+            }
+        
+        break;
+    
+        default:
+            return res.status(500).json({ msg: 'Se me olvidó validar esto'});
+    }
+
+
+    // Limpiar imágenes previas
+    if ( modelo.img ) {
+        // Hay que borrar la imagen del servidor
+        const pathImagen = path.join( __dirname, '../uploads', coleccion, modelo.img );
+        if ( fs.existsSync( pathImagen ) ) {
+            return res.sendFile( pathImagen ) // responder la imagen  
+        }
+    }
+
+    const pathImagen = path.join( __dirname, '../assets/no-image.jpg');
+    res.sendFile( pathImagen );
+}
+
 module.exports ={
     cargarArchivo,
    // actualizarImagenCloudinary,
-    actualizarImagen
+    actualizarImagen,
+    mostrarImagen
 }
