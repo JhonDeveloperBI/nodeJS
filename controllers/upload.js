@@ -168,7 +168,7 @@ const mostrarImagen = async(req, res = response ) => {
     if ( modelo.img ) {
         // Hay que borrar la imagen del servidor
         const pathImagen = path.join( __dirname, '../uploads', coleccion, modelo.img );
-        if ( fs.existsSync( pathImagen ) ) {
+        if ( fs.existsSync( pathImagen ) ) { // si existe la imagen
             return res.sendFile( pathImagen ) // responder la imagen  
         }
     }
